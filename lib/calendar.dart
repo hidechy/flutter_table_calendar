@@ -32,6 +32,13 @@ class _CalendarState extends State<Calendar> {
     super.initState();
 
     _eventsList = {
+      DateTime.parse('2022-07-24'): ['', '', '', '', '', '', ''],
+      DateTime.parse('2022-07-25'): ['', '', '', '', '', ''],
+      DateTime.parse('2022-07-26'): ['', '', '', '', ''],
+      DateTime.parse('2022-07-27'): ['', '', '', ''],
+
+      ///
+
       DateTime.parse('2022-07-28'): ['', '', ''],
       DateTime.parse('2022-07-29'): ['', ''],
       DateTime.parse('2022-07-30'): [''],
@@ -116,6 +123,10 @@ class _CalendarState extends State<Calendar> {
                     _selectedDay = selectedDay;
                     _focusedDay = focusedDay;
                   });
+                },
+
+                onPageChanged: (focusedDay) {
+                  _focusedDay = focusedDay;
                 },
               ),
             ],
