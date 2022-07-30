@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -17,8 +19,37 @@ class _CalendarState extends State<Calendar> {
 
   final Utility _utility = Utility();
 
+  Map<DateTime, List> _eventsList = {};
+
+  ///
+  int getHashCode(DateTime key) {
+    return key.day * 1000000 + key.month * 10000 + key.year;
+  }
+
+  ///
+  @override
+  void initState() {
+    super.initState();
+
+    _eventsList = {
+      DateTime.parse('2022-07-28'): ['', '', ''],
+      DateTime.parse('2022-07-29'): ['', ''],
+      DateTime.parse('2022-07-30'): [''],
+    };
+  }
+
+  ///
   @override
   Widget build(BuildContext context) {
+    final _events = LinkedHashMap<DateTime, List>(
+      equals: isSameDay,
+      hashCode: getHashCode,
+    )..addAll(_eventsList);
+
+    List getEventForDay(DateTime day) {
+      return _events[day] ?? [];
+    }
+
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -28,11 +59,12 @@ class _CalendarState extends State<Calendar> {
             children: [
               const SizedBox(height: 50),
               TableCalendar(
+                eventLoader: getEventForDay,
+
+                ///
+
                 calendarStyle: const CalendarStyle(
-                  todayDecoration: BoxDecoration(
-                    color: Colors.orangeAccent,
-                    shape: BoxShape.circle,
-                  ),
+                  todayDecoration: BoxDecoration(color: Colors.transparent),
                   selectedDecoration: BoxDecoration(
                     color: Colors.indigo,
                     shape: BoxShape.circle,
