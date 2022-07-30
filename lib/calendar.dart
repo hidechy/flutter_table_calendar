@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import 'utility.dart';
+
 class Calendar extends StatefulWidget {
   const Calendar({Key? key}) : super(key: key);
 
@@ -13,70 +15,78 @@ class _CalendarState extends State<Calendar> {
 
   DateTime? _selectedDay;
 
+  final Utility _utility = Utility();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: Stack(
+        fit: StackFit.expand,
         children: [
-          const SizedBox(height: 50),
-          TableCalendar(
-            calendarStyle: const CalendarStyle(
-              todayDecoration: BoxDecoration(
-                color: Colors.orangeAccent,
-                shape: BoxShape.circle,
-              ),
-              selectedDecoration: BoxDecoration(
-                color: Colors.indigo,
-                shape: BoxShape.circle,
-              ),
+          _utility.getBackGround(),
+          Column(
+            children: [
+              const SizedBox(height: 50),
+              TableCalendar(
+                calendarStyle: const CalendarStyle(
+                  todayDecoration: BoxDecoration(
+                    color: Colors.orangeAccent,
+                    shape: BoxShape.circle,
+                  ),
+                  selectedDecoration: BoxDecoration(
+                    color: Colors.indigo,
+                    shape: BoxShape.circle,
+                  ),
 
-              ///
+                  ///
 
-              rangeHighlightColor: Color(0xFFBBDDFF),
+                  rangeHighlightColor: Color(0xFFBBDDFF),
 
-              ///
+                  ///
 
-              todayTextStyle: TextStyle(color: Color(0xFFFAFAFA)),
-              selectedTextStyle: TextStyle(color: Color(0xFFFAFAFA)),
-              rangeStartTextStyle: TextStyle(color: Color(0xFFFAFAFA)),
-              rangeEndTextStyle: TextStyle(color: Color(0xFFFAFAFA)),
+                  todayTextStyle: TextStyle(color: Color(0xFFFAFAFA)),
+                  selectedTextStyle: TextStyle(color: Color(0xFFFAFAFA)),
+                  rangeStartTextStyle: TextStyle(color: Color(0xFFFAFAFA)),
+                  rangeEndTextStyle: TextStyle(color: Color(0xFFFAFAFA)),
 //              outsideTextStyle: TextStyle(color: Colors.white),
-              disabledTextStyle: TextStyle(color: Colors.grey),
-              holidayTextStyle: TextStyle(color: Color(0xFF5C6BC0)),
-              weekendTextStyle: TextStyle(color: Colors.white),
+                  disabledTextStyle: TextStyle(color: Colors.grey),
+                  holidayTextStyle: TextStyle(color: Color(0xFF5C6BC0)),
+                  weekendTextStyle: TextStyle(color: Colors.white),
 
-              ///
+                  ///
 
-              markerDecoration: BoxDecoration(color: Colors.white),
-              rangeStartDecoration: BoxDecoration(color: Color(0xFF6699FF)),
-              rangeEndDecoration: BoxDecoration(color: Color(0xFF6699FF)),
-              holidayDecoration: BoxDecoration(
-                border: Border.fromBorderSide(
-                  BorderSide(
-                    color: Color(0xFF9FA8DA),
+                  markerDecoration: BoxDecoration(color: Colors.white),
+                  rangeStartDecoration: BoxDecoration(color: Color(0xFF6699FF)),
+                  rangeEndDecoration: BoxDecoration(color: Color(0xFF6699FF)),
+                  holidayDecoration: BoxDecoration(
+                    border: Border.fromBorderSide(
+                      BorderSide(
+                        color: Color(0xFF9FA8DA),
+                      ),
+                    ),
                   ),
                 ),
+
+                ///
+
+                headerStyle: const HeaderStyle(formatButtonVisible: false),
+                firstDay: DateTime.utc(2020, 1, 1),
+                lastDay: DateTime.utc(2030, 12, 31),
+                focusedDay: _focusedDay,
+
+                ///
+
+                selectedDayPredicate: (day) {
+                  return isSameDay(_selectedDay, day);
+                },
+                onDaySelected: (selectedDay, focusedDay) {
+                  setState(() {
+                    _selectedDay = selectedDay;
+                    _focusedDay = focusedDay;
+                  });
+                },
               ),
-            ),
-
-            ///
-
-            headerStyle: const HeaderStyle(formatButtonVisible: false),
-            firstDay: DateTime.utc(2020, 1, 1),
-            lastDay: DateTime.utc(2030, 12, 31),
-            focusedDay: _focusedDay,
-
-            ///
-
-            selectedDayPredicate: (day) {
-              return isSameDay(_selectedDay, day);
-            },
-            onDaySelected: (selectedDay, focusedDay) {
-              setState(() {
-                _selectedDay = selectedDay;
-                _focusedDay = focusedDay;
-              });
-            },
+            ],
           ),
         ],
       ),
